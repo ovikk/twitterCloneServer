@@ -1,4 +1,5 @@
 import Tweet from '../../models/Tweet';
+import FavoriteTweet from '../../models/FavoriteTweet';
 import { requireAuth } from '../../services/auth';
 import { pubsub } from '../../config/pubsub';
 
@@ -33,7 +34,7 @@ export default {
     try {
       await requireAuth(user);
       const tweet = await Tweet.create({ ...args, user: user._id });
-      pubsub.publish(TWEET_ADDED,{ [TWEET_ADDED]: tweet });
+      pubsub.publish(TWEET_ADDED, { [TWEET_ADDED]: tweet });
       return tweet;
     } catch (error) {
       throw error;
@@ -65,6 +66,15 @@ export default {
       return {
         message: 'Delete Success!',
       };
+    } catch (error) {
+      throw error;
+    }
+  },
+  favoriteTweet: async (_, { _id }, { user }) => {
+    try {
+      await requireAuth(user);
+      const favorites = await FavoriteTweet.findOne({ userId: user._id });
+      return favorites.userFavoritedTweet(_id);
     } catch (error) {
       throw error;
     }

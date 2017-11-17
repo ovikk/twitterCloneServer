@@ -1,4 +1,5 @@
 import User from '../../models/User';
+import FavoriteTweet from '../../models/FavoriteTweet';
 import { requireAuth } from '../../services/auth';
 
 export default {
@@ -6,8 +7,9 @@ export default {
     try {
       const [firstName, ...lastName] = fullName.split(' ');
       const user = await User.create({ firstName, lastName, ...rest });
+      await FavoriteTweet.create({ userId: user._id });
 
-      return {
+      return { 
         token: user.createToken(),
       };
     } catch (error) {

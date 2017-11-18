@@ -4,6 +4,7 @@ import { requireAuth } from '../../services/auth';
 import { pubsub } from '../../config/pubsub';
 
 const TWEET_ADDED = 'tweetAdded';
+export const TWEET_FAVORITED = 'tweetFavorited';
 
 export default {
   getTweet: async (_, { _id }, { user }) => {
@@ -103,4 +104,7 @@ export default {
   tweetAdded: {
     subscribe: () => pubsub.asyncIterator(TWEET_ADDED),
   },
+  tweetFavorited: {
+    subscribe: () => pubsub.asyncIterator(TWEET_FAVORITED),
+  }
 };
